@@ -1,0 +1,11 @@
+NB + SeqDrift2: 
+	Classifier Error-rate: 16.63%,
+	Classifier Average Memory Usage (bytes): 31928.00,
+	Classifier Average Runtime (ms): 78043.82,
+	Classifier Total Runtime (ms): 78043.82,
+	Detection Delay: nan TP: 0 FP: 0 FN: 100,
+	Average Detection Memory Usage (bytes): 6644504.00,
+	Average Detection Runtime (ms): 1972.60,
+	Total Detection Runtime (ms): 1972.60,
+	Drift Points detected: [],
+	kappa: 0.6674964136465572

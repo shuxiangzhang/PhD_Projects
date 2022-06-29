@@ -1,0 +1,143 @@
+install.packages('MASS')
+install.packages('dplyr')
+install.packages('cramer')
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("GSAR")
+install.packages('pryr')
+install.packages("twosamples")# cvm_test
+install.packages("DescTools")#RunsTest
+library(DescTools)
+library(twosamples)
+library(pryr)
+library(GSAR)
+library(dplyr)
+library(cramer)
+library(MASS)
+
+td.test<-function(x,y){
+  ranked_x<-x[order(x,decreasing = T)]
+  ranked_y<-y[order(x,decreasing = T)]
+  if (ranked_x[1]>ranked_y[1]){
+    c_1<-length(ranked_x[ranked_x>ranked_y[1]])
+    c_2<-length(ranked_y[ranked_y<ranked_x[length(ranked_x)]])
+    c<-c_1+c_2
+  }else{
+    c_1<-length(ranked_y[ranked_y>ranked_x[1]])
+    c_2<-length(ranked_x[ranked_x<ranked_y[length(ranked_y)]])
+    c<-c_1+c_2
+  }
+  return (c>=7)
+}
+
+stream_generator<-function(rho,sd,L,step_size,d){
+  mu_1<-0.2
+  mu<-rep(mu_1,d)
+  Sigma<-matrix(nrow = d,ncol = d)
+  for(i in seq(d)){
+    for(j in seq(d)){
+      if (i==j){
+        Sigma[i,j]<-sd^2
+      }else{
+        Sigma[i,j]<-sd^2*rho
+      }
+    }
+  }
+  s_1<-mvrnorm((L-1000), mu, Sigma )
+  mu_1<-mu_1+step_size
+  mu<-rep(mu_1,d)
+  print(mu)
+  s_2<-mvrnorm(1000, mu, Sigma )
+  stream<-rbind(s_1,s_2)
+  return(stream)
+}
+
+detect<-function(rho,sd,L,step_size,d){
+  
+  TP<-0
+  DD<-NULL
+  D_time<-NULL
+  MEM<-NULL
+  T_time<-NULL
+  T_time_num<-NULL
+  D_location<-list()
+  for (i in seq(30)){
+    dd<-NULL
+    signal<-FALSE
+    stream<-stream_generator(rho,sd,L,step_size,d)
+    win1<-stream[1:100,]
+    win2<-stream[101:200,]
+    detect<-NULL
+    flag<-TRUE
+    counter<-0
+    latest_point<-200
+    for (j in 201:L){
+      # Break the loop if no drift was detected after the whole sliding window has entered the new distribution.
+      if ((j-(L-1000))>=100){
+        break
+      }
+      win2<-win2[-1,]
+      win2<-rbind(win2,stream[j,])
+      if (flag==TRUE){
+        if (j-latest_point == 1){
+          print(j)
+          latest_point<-j
+          start_time = Sys.time()
+          ave_1<-colMeans(win1)
+          ave_2<-colMeans(win2)
+          f_1<-apply(win1,1,function(x) dist(rbind(x,ave_1)))
+          f_2<-apply(win2,1,function(x) dist(rbind(x,ave_1)))
+          result<-td.test(f_1,f_2)
+          p_value<-result
+          end_time = Sys.time()
+          print(end_time-start_time)
+          if (p_value){
+            detect<-c(detect,j)
+            print(paste('Drift was detected at:',j))
+            if(j>=(L-1000) && j<=L){
+              signal<-TRUE
+              break
+            }
+            flag<-FALSE
+            counter<-0
+          }
+        }
+      }else{
+        counter<-counter+1
+        if (counter==200){
+          win1<-win2
+          flag<-TRUE
+          latest_point<-latest_point+counter
+        }
+      }
+    }
+    if (signal==TRUE){
+      TP<-TP+1
+      dd<-j-(L-1000)
+      DD<-c(DD,dd)
+    }
+  }
+  
+  if (length(DD)==0){
+    m_dd<-0
+    sd_dd<-0
+  }else if(length(DD)==1){
+    m_dd<-mean(DD)
+    sd_dd<-0
+  }else{
+    m_dd<-mean(DD)
+    sd_dd<-sd(DD)
+  }
+  
+  m_dd<-format(round(m_dd, 2), nsmall = 2)
+  sd_dd<-format(round(sd_dd, 2), nsmall = 2)
+  
+  df<-data.frame(Detection_Delay=paste(m_dd,'/',sd_dd),tp=TP)
+  write.csv(df,file = paste('uni_td_mean_abrupt','_',d,'_',L,'_','.csv',sep = ''))
+}
+
+
+set.seed(0)
+for (l in (c(seq(20000,100000,20000),500000,1000000))){
+  detect(rho = 0.2,sd = 0.2,L = l,step_size = 0.5,d = 2)
+}

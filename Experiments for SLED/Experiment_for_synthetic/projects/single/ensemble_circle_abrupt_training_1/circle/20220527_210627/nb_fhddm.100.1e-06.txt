@@ -1,0 +1,11 @@
+NB + FHDDM: 
+	Classifier Error-rate: 16.58%,
+	Classifier Average Memory Usage (bytes): 31729.60,
+	Classifier Average Runtime (ms): 544.15,
+	Classifier Total Runtime (ms): 88641.22,
+	Detection Delay: 90.62 TP: 8 FP: 12 FN: 192,
+	Average Detection Memory Usage (bytes): 1760.00,
+	Average Detection Runtime (ms): 34.00,
+	Total Detection Runtime (ms): 698.40,
+	Drift Points detected: [91519, 129975, 131126, 153407, 258624, 260234, 261069, 292478, 320316, 321078, 328569, 329087, 330128, 331046, 334184, 335067, 344486, 345064, 356940, 389188],
+	kappa: 0.6683065111436037

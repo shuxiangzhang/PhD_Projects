@@ -1,0 +1,104 @@
+install.packages('MASS')
+install.packages('dplyr')
+install.packages('cramer')
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("GSAR")
+install.packages('pryr')
+library(pryr)
+library(GSAR)
+library(dplyr)
+library(cramer)
+library(MASS)
+
+stream_generator<-function(rho,sd,L,d){
+  mu_1 <-0.2
+  mu<-rep(mu_1,d)
+  Sigma<-matrix(nrow = d,ncol = d)
+  for(i in seq(d)){
+    for(j in seq(d)){
+      if (i==j){
+        Sigma[i,j]<-sd^2
+      }else{
+        Sigma[i,j]<-sd^2*rho
+      }
+    }
+  }
+  
+  stream<-mvrnorm(L, mu, Sigma )
+  return(stream)
+}
+
+detect<-function(rho,sd,L,d){
+  fp<-NULL
+  MEM<-NULL
+  T_time<-NULL
+  for (i in seq(30)){
+    d_time<-NULL
+    mem<-NULL
+    stream<-stream_generator(rho,sd,L,d)
+    win1<-stream[1:100,]
+    win2<-stream[101:200,]
+    detect<-NULL
+    flag<-TRUE
+    counter<-0
+    latest_point<-200
+    for (j in 201:L){
+      print(j)
+      start_time = Sys.time()
+      win2<-win2[-1,]
+      win2<-rbind(win2,stream[j,])
+      if (flag==TRUE){
+        if (j-latest_point == 100){
+          latest_point<-j
+          ave_1<-colMeans(win1)
+          ave_2<-colMeans(win2)
+          f_1<-apply(win1,1,function(x) dist(rbind(x,ave_1)))
+          f_2<-apply(win2,1,function(x) dist(rbind(x,ave_1)))
+          result<-ks.test(f_1,f_2)
+          p_value<-result$p.value
+          if (p_value<0.05){
+            detect<-c(detect,j)
+            print(paste('Drift was detected at:',j))
+            flag<-FALSE
+            counter<-0
+          }
+          end_time = Sys.time()
+          t <-end_time-start_time
+          print(t)
+          d_time<-c(d_time,as.numeric(t))
+        }
+      }else{
+        counter<-counter+1
+        if (counter==100){
+          win1<-win2
+          flag<-TRUE
+          latest_point<-latest_point+counter
+        }
+      }
+    }
+    fp<-c(fp,length(detect))
+    T_time<-c(T_time,mean(d_time)) # Record the total execution time when no drift is detected.
+    print(T_time)
+    mem<-object.size(win1)+object.size(win2)+object.size(result)
+    MEM<-c(MEM,as.numeric(mem))
+  }
+  
+  m_fpr<-mean(fp/L)
+  sd_fpr<-sd(fp/L)
+  
+  m_execution_time<-mean(T_time)
+  sd_execution_time<-sd(T_time)
+ 
+  m_memory<-mean(MEM)
+  sd_memory<-sd(MEM)
+  
+  
+  df<-data.frame(fpr=paste(m_fpr,'/',sd_fpr),Memory_usage=paste(m_memory,'/',sd_memory),execution_time=paste(m_execution_time,'/',sd_execution_time))
+  write.csv(df,file = paste('uni_ks_fp_',d,'_',L,'.csv',sep = ''))
+}
+
+set.seed(0)
+for (d in seq(5,100,5)){
+  detect(rho = 0.2,sd = 0.2,L = 50000,d = d)
+}

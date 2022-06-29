@@ -1,0 +1,11 @@
+NB + ENSEMBLE: 
+	Classifier Error-rate: 16.69%,
+	Classifier Average Memory Usage (bytes): 31500.00,
+	Classifier Average Runtime (ms): 25.19,
+	Classifier Total Runtime (ms): 2363.36,
+	Detection Delay: 119.50 TP: 2 FP: 14 FN: 18,
+	Average Detection Memory Usage (bytes): 97628.50,
+	Average Detection Runtime (ms): 39.37,
+	Total Detection Runtime (ms): 3677.87,
+	Drift Points detected: [206, 1080, 2242, 3068, 3379, 4214, 4395, 4961, 5836, 7159, 8002, 8382, 8722, 9045, 10228, 11084],
+	kappa: 0.6662988499924514

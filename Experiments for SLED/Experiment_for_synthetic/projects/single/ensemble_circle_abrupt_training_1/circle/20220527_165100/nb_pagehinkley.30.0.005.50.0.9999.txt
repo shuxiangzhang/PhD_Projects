@@ -1,0 +1,11 @@
+NB + PageHinkley: 
+	Classifier Error-rate: 13.31%,
+	Classifier Average Memory Usage (bytes): 31928.00,
+	Classifier Average Runtime (ms): 60509.71,
+	Classifier Total Runtime (ms): 60509.71,
+	Detection Delay: nan TP: 0 FP: 0 FN: 100,
+	Average Detection Memory Usage (bytes): 960.00,
+	Average Detection Runtime (ms): 656.30,
+	Total Detection Runtime (ms): 656.30,
+	Drift Points detected: [],
+	kappa: 0.7338020124366741
