@@ -125,7 +125,7 @@ Contributions are what make the open source community such an amazing place to l
 <!-- LICENSE -->
 ## License <a name="License"></a>
 
-Distributed under the MIT License. See [LICENSE.txt](https://github.com/shuxiangzhang/PhD_Projects/blob/main/LICENSE.txt) for more information.
+This project is distributed under the MIT License. See [LICENSE.txt](https://github.com/shuxiangzhang/PhD_Projects/blob/main/LICENSE.txt) for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -142,7 +142,7 @@ Project Link: [https://github.com/shuxiangzhang/PhD_Projects](https://github.com
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments <a name="Acknowledgments"></a>
 
-Here is a list of resources I find helpful and would like to give credit to.
+Below is a list of resources I find helpful and would like to give credit to.
 
 * [The Tornado Framework](https://github.com/alipsgh/tornado)
 * [Choose an Open Source License](https://choosealicense.com)
