@@ -102,7 +102,7 @@ install.packages('pryr')
 
 ### Requirements <a name="Requirements4"></a>
 
-`ILDD` is implemented in Python. To run the experiments, you must have Python 3.7 or above installed on your system.
+`VAE-DD` is implemented in Python. To run the experiments, you must have Python 3.7 or above installed on your system.
 
 **core dependencies** to be installed:
 
