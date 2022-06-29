@@ -52,7 +52,7 @@ The goal of this project is to detect and interpret drift in evolving data strea
 
 `MUDD` is implemented in R. To run the experiments, you must have R 4.1.3 or above installed on your system.
 
-**core dependencies** to be installed:
+**Core dependencies** to be installed:
 
 ```bash
 install.packages('MASS')
@@ -74,7 +74,7 @@ install.packages('pryr')
 
 `ILDD` is implemented in R. To run the experiments, you must have R 4.1.3 or above installed on your system.
 
-**core dependencies** to be installed:
+**Core dependencies** to be installed:
 
 ```bash
 install.packages('stream')
@@ -104,7 +104,7 @@ install.packages('pryr')
 
 `VAE-DD` is implemented in Python. To run the experiments, you must have Python 3.7 or above installed on your system.
 
-**core dependencies** to be installed:
+**Core dependencies** to be installed:
 
 ```bash
 pip install numpy
