@@ -44,7 +44,7 @@ The goal of this project is to detect and interpret drift in evolving data strea
 ## MUDD <a name="MUDD"></a>
 
 
-`MUDD` is a novel lightweight unsupervised drift detector that is designed for unsupervised learning tasks. It implements a distance-based data transformation mechanism which makes is fast when detecting drifts in multi-dimensional data streams. The source code for implementing and evaluating the method is included in the folder [Experiments for MUDD](https://github.com/shuxiangzhang/PhD_Projects/tree/main/Experiments%20for%20MUDD).
+`MUDD` is a novel lightweight unsupervised drift detector that is designed for unsupervised learning tasks. It implements a distance-based data transformation mechanism which makes it fast when detecting drifts in multi-dimensional data streams. The source code for implementing and evaluating the method is included in the folder [Experiments for MUDD](https://github.com/shuxiangzhang/PhD_Projects/tree/main/Experiments%20for%20MUDD).
 
 
 ### Requirements <a name="Requirements2"></a>
